@@ -424,6 +424,10 @@ async function run() {
 
         let content = null;
 
+        fs.readdirSync('./').forEach(file => {
+            console.log(file);
+        });
+
         switch (accident) {
             case 'quote':
                 const quote = getRandomElementFromArray(quotes);
@@ -443,13 +447,13 @@ async function run() {
 
             case 'painting':
                 let paintings = [];
-                fs.readdirSync('./paintings').forEach(file => {
+                fs.readdirSync('./dist/paintings').forEach(file => {
                     paintings.push(file);
                 });
                 const painting = getRandomElementFromArray(paintings);
                 console.log(painting);
 
-                content = btoa(fs.readFileSync('./paintings/' + painting));
+                content = btoa(fs.readFileSync('./dist/paintings/' + painting));
 
                 break;
         }
