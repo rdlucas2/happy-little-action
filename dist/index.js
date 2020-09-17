@@ -833,9 +833,9 @@ async function run() {
                 console.log(quote);
                 console.log(fileName);
 
-                fs.writeFile(fileName, quote, function(err) {
+                fs.writeFile(fileName, quote, { flag: 'wx' }, function(err) {
                     if (err) {
-                        core.setFailed(error.message);
+                        console.log(error.message);
                     } else {
                         console.log('Saved!');
                     }
@@ -854,6 +854,7 @@ async function run() {
                 console.log(painting);
 
                 const response = await axios.get(painting, { responseType: 'arraybuffer' });
+                console.log(response);
                 //.then(response => Buffer.from(response.data, 'binary').toString('base64'))
 
                 content = Buffer.from(response.data, 'binary').toString('base64');
