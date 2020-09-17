@@ -276,7 +276,7 @@ async function run() {
                 console.log(quote);
                 console.log(fileName);
 
-                fs.writeFile(fileName, quote, { flag: 'wx' }, function(err) {
+                fs.writeFileSync(fileName, quote, { flag: 'wx' }, function(err) {
                     if (err) {
                         console.log(error.message);
                     } else {
