@@ -441,7 +441,7 @@ async function run() {
                     console.log('Saved!');
                 });
 
-                content = btoa(fs.readFileSync(fileName));
+                content = fs.readFileSync(fileName).toString('base64');
 
                 break;
 
@@ -453,7 +453,7 @@ async function run() {
                 const painting = getRandomElementFromArray(paintings);
                 console.log(painting);
 
-                content = btoa(fs.readFileSync('./dist/paintings/' + painting));
+                content = fs.readFileSync('./dist/paintings/' + painting).toString('base64');
 
                 break;
         }
