@@ -324,7 +324,7 @@ async function run() {
                 repo: repo,
                 path: path,
                 message: 'A happy little accident.',
-                content: contentEncoded,
+                content: content,
                 /*
                 committer: {
                   name: `Octokit Bot`,
