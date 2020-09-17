@@ -307,7 +307,7 @@ async function run() {
 
         if (content) {
             const octokit = github.getOctokit(githubToken);
-            const repo = github.context.repository.full_name;
+            const repo = github.context.payload.repository.full_name;
             const owner = github.context.payload.repository.owner.login;
             const path = './';
 
