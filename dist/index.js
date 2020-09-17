@@ -864,9 +864,13 @@ async function run() {
 
         if (content) {
             const octokit = github.getOctokit(githubToken);
-            const repo = github.context.repo;
+            const repo = github.context.repository.full_name;
             const owner = github.context.payload.repository.owner.login;
             const path = './';
+
+            console.log(repo);
+            console.log(owner);
+            console.log(path);
             /*
             const sha = null;
             const branch = null;
@@ -874,13 +878,15 @@ async function run() {
             const author = null;
             */
 
-            await octokit.repos.createOrUpdateFileContents(
+            const res = await octokit.repos.createOrUpdateFileContents(
                 owner,
                 repo,
                 path,
                 'A happy little accident',
                 content
             );
+
+            console.log(res);
         }
 
         // octokit.git.createCommit({
