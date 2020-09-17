@@ -1,0 +1,9 @@
+name: 'Happy Little Action'
+description: 'Add this action to your repository to fill your repository with happy little accidents (quotes and images from Bob Ross).'
+inputs:
+    github-token:  # id of input
+        description: 'Github Token'
+        required: true
+runs:
+    using: 'node12'
+    main: 'dist/index.js'
