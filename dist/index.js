@@ -825,15 +825,18 @@ async function run() {
             console.log(f);
         });
 
+        let fileName = null;
+
         switch (accident) {
             case 'quote':
                 const quote = getRandomElementFromArray(quotes);
-                const fileName = `${__dirname}/happy-accident-${Date.now()}.txt`;
+                fileName = `happy-little-quote-${Date.now()}.txt`;
+                const filePath = `${__dirname}/${fileName}`
 
                 console.log(quote);
-                console.log(fileName);
+                console.log(filePath);
 
-                fs.writeFileSync(fileName, quote, { flag: 'wx' }, function(err) {
+                fs.writeFileSync(filePath, quote, { flag: 'wx' }, function(err) {
                     if (err) {
                         console.log(error.message);
                     } else {
@@ -841,7 +844,7 @@ async function run() {
                     }
                 });
 
-                content = fs.readFileSync(fileName).toString('base64');
+                content = fs.readFileSync(filePath).toString('base64');
 
                 break;
 
@@ -857,6 +860,7 @@ async function run() {
                 console.log(response);
                 //.then(response => Buffer.from(response.data, 'binary').toString('base64'))
 
+                fileName = `happy-little-painting-${Date.now()}.png`;
                 content = Buffer.from(response.data, 'binary').toString('base64');
 
                 break;
@@ -864,38 +868,34 @@ async function run() {
 
         if (content) {
             const octokit = github.getOctokit(githubToken);
-            const repo = github.context.payload.repository.full_name;
-            const owner = `/${github.context.payload.repository.owner.login}`;
-            const path = './';
+            const owner = `${github.context.payload.repository.owner.login}`;
+            const repo = github.context.payload.repository.name;
+            const path = `${fileName}`;
 
-            console.log(repo);
             console.log(owner);
+            console.log(repo);
             console.log(path);
-            /*
-            const sha = null;
-            const branch = null;
-            const comitter = null;
-            const author = null;
-            */
 
-            const res = await octokit.repos.createOrUpdateFileContents(
-                owner,
-                repo,
-                path,
-                'A happy little accident',
-                content
-            );
+            const res = await octokit.repos.createOrUpdateFileContents({
+                owner: owner,
+                repo: repo,
+                path: path,
+                message: 'A happy little accident.',
+                content: contentEncoded,
+                /*
+                committer: {
+                  name: `Octokit Bot`,
+                  email: null,
+                },
+                author: {
+                  name: "Octokit Bot",
+                  email: null",
+                },
+                */
+            });
 
             console.log(res);
         }
-
-        // octokit.git.createCommit({
-        //     owner,
-        //     repo,
-        //     message,
-        //     tree,
-        //     parents,
-        //   });
 
     } catch (error) {
         core.setFailed(error.message);
