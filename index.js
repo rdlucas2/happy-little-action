@@ -1,6 +1,7 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 const fs = require('fs');
+const axios = require('axios');
 
 const quotes = [
     'That\'ll be our little secret.',
@@ -263,17 +264,24 @@ async function run() {
             console.log(file);
         });
 
+        fs.readdirSync(__dirname).forEach(f => {
+            console.log(f);
+        });
+
         switch (accident) {
             case 'quote':
                 const quote = getRandomElementFromArray(quotes);
-                const fileName = `happy-accident-${Date.now()}.txt`;
+                const fileName = `${__dirname}/happy-accident-${Date.now()}.txt`;
 
                 console.log(quote);
                 console.log(fileName);
 
                 fs.writeFile(fileName, quote, function(err) {
-                    if (err) core.setFailed(error.message);
-                    console.log('Saved!');
+                    if (err) {
+                        core.setFailed(error.message);
+                    } else {
+                        console.log('Saved!');
+                    }
                 });
 
                 content = fs.readFileSync(fileName).toString('base64');
@@ -281,14 +289,17 @@ async function run() {
                 break;
 
             case 'painting':
-                let paintings = [];
-                fs.readdirSync('./dist/paintings').forEach(file => {
-                    paintings.push(file);
-                });
-                const painting = getRandomElementFromArray(paintings);
+                let paintingsUrls = []
+                for (var i = 4; i <= 411; i++) {
+                    paintingsUrls.push(`https://raw.githubusercontent.com/rdlucas2/happy-little-action/master/paintings/painting${i}.png`);
+                }
+                const painting = getRandomElementFromArray(paintingsUrls);
                 console.log(painting);
 
-                content = fs.readFileSync('./dist/paintings/' + painting).toString('base64');
+                const response = await axios.get(painting, { responseType: 'arraybuffer' });
+                //.then(response => Buffer.from(response.data, 'binary').toString('base64'))
+
+                content = Buffer.from(response.data, 'binary').toString('base64');
 
                 break;
         }
