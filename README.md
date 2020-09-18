@@ -10,7 +10,7 @@ Happy little accidents appear in your github repository
 ## Example usage
 
 ```
-uses: rdlucas2/happy-little-action@v0.0.1
+uses: rdlucas2/happy-little-action@v0.0.13
     with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
